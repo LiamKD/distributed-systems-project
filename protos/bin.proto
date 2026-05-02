@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package bin;
+
+service BinService {
+  // Unary RPC
+  rpc GetBinStatus(BinRequest) returns (BinStatus);
+
+  // Server streaming RPC
+  rpc StreamAlerts(AreaRequest) returns (stream Alert);
+
+  // Client streaming RPC
+  rpc UploadReadings(stream BinReading) returns (UploadSummary);
+}
+
+message BinRequest {
+  string binId = 1;
+}
+
+message AreaRequest {
+  string area = 1;
+}
+
+message BinStatus {
+  string binId = 1;
+  int32 fillLevel = 2;
+  int32 batteryLevel = 3;
+  bool overflowRisk = 4;
+}
+
+message Alert {
+  string binId = 1;
+  string message = 2;
+  string timestamp = 3;
+}
+
+message BinReading {
+  string binId = 1;
+  int32 fillLevel = 2;
+  string timestamp = 3;
+}
+
+message UploadSummary {
+  int32 count = 1;
+  string message = 2;
+}
