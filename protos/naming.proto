@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package naming;
+
+service NamingService {
+  rpc RegisterService(ServiceInfo) returns (RegisterResponse);
+  rpc UnregisterService(ServiceId) returns (GenericResponse);
+  rpc DiscoverService(ServiceQuery) returns (ServiceInfo);
+  rpc ListServices(Empty) returns (ServiceList);
+}
+
+message Empty {}
+
+message ServiceInfo {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  string host = 4;
+  int32 port = 5;
+}
+
+message ServiceId {
+  string id = 1;
+}
+
+message ServiceQuery {
+  string type = 1;
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GenericResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ServiceList {
+  repeated ServiceInfo services = 1;
+}
