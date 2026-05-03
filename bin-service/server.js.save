@@ -1,15 +1,15 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
-const PROTO_PATH = __dirname + '/../protos/bin.proto';
-
-const packageDefinition = protoLoader.loadSync(PROTO_PATH);
-const binProto = grpc.loadPackageDefinition(packageDefinition).bin;
-
 const NAMING_PROTO_PATH = __dirname + '/../protos/naming.proto';
 
 const namingPackageDefinition = protoLoader.loadSync(NAMING_PROTO_PATH);
 const namingProto = grpc.loadPackageDefinition(namingPackageDefinition).naming;
+
+const PROTO_PATH = __dirname + '/../protos/bin.proto';
+
+const packageDefinition = protoLoader.loadSync(PROTO_PATH);
+const binProto = grpc.loadPackageDefinition(packageDefinition).bin;
 
 // Unary RPC
 function GetBinStatus(call, callback) {
@@ -57,32 +57,6 @@ function UploadReadings(call, callback) {
   });
 }
 
-// Registers this Bin Service with the Naming Service
-function registerWithNamingService() {
-  const namingClient = new namingProto.NamingService(
-    'localhost:50051',
-    grpc.credentials.createInsecure()
-  );
-
-  namingClient.RegisterService(
-    {
-      id: 'bin-service-1',
-      name: 'Bin Monitoring Service',
-      type: 'bin',
-      host: 'localhost',
-      port: 50052
-    },
-    (err, response) => {
-      if (err) {
-        console.error('Failed to register with Naming Service:', err.message);
-        return;
-      }
-
-      console.log('Naming Service registration:', response.message);
-    }
-  );
-}
-
 // Start server
 function main() {
   const server = new grpc.Server();
@@ -94,9 +68,8 @@ function main() {
   });
 
   server.bindAsync('0.0.0.0:50052', grpc.ServerCredentials.createInsecure(), () => {
-  console.log("Bin Service running on port 50052");
-  registerWithNamingService();
-});
+    console.log("Bin Service running on port 50052");
+  });
 }
 
 main();
