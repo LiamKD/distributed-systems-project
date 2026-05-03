@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package scheduling;
+
+service SchedulingService {
+  rpc CreatePickup(PickupRequest) returns (PickupResponse);
+  rpc ListPickups(Empty) returns (PickupList);
+}
+
+message Empty {}
+
+message PickupRequest {
+  string binId = 1;
+  int32 priority = 2;
+}
+
+message PickupResponse {
+  string pickupId = 1;
+  string binId = 2;
+  int32 priority = 3;
+  string scheduledTime = 4;
+  string status = 5;
+}
+
+message PickupList {
+  repeated PickupResponse pickups = 1;
+}
