@@ -75,7 +75,6 @@ function main() {
     grpc.ServerCredentials.createInsecure(),
     () => {
       console.log('Naming Service running on port 50051');
-      server.start();
     }
   );
 }
