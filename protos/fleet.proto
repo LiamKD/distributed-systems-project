@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package fleet;
+
+service FleetService {
+  rpc LiveTruckControl(stream ControlMessage) returns (stream TruckUpdate);
+}
+
+message ControlMessage {
+  string truckId = 1;
+  string command = 2;
+}
+
+message TruckUpdate {
+  string truckId = 1;
+  string status = 2;
+  string location = 3;
+}
