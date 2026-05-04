@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Waste Management</title>
+</head>
+<body>
+
+<h1>Smart Waste Management</h1>
+<h3>By Liam Doherty - x25111175</h3>
+
+
+<h2>Services</h2>
+<button onclick="loadServices()">Load Services</button>
+<pre id="services"></pre>
+
+<h2>Bin Status</h2>
+<input id="binId" value="BIN001">
+<button onclick="getBin()">Get Status</button>
+<pre id="bin"></pre>
+
+<h2>Create Pickup</h2>
+<input id="pickupBin" value="BIN001">
+<input id="priority" type="number" value="5">
+<button onclick="createPickup()">Create</button>
+<pre id="pickup"></pre>
+
+<script>
+async function loadServices() {
+  const res = await fetch('/services');
+  document.getElementById('services').textContent =
+    JSON.stringify(await res.json(), null, 2);
+}
+
+async function getBin() {
+  const id = document.getElementById('binId').value;
+  const res = await fetch('/bin/' + id);
+  document.getElementById('bin').textContent =
+    JSON.stringify(await res.json(), null, 2);
+}
+
+async function createPickup() {
+  const binId = document.getElementById('pickupBin').value;
+  const priority = Number(document.getElementById('priority').value);
+
+  const res = await fetch('/pickup', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ binId, priority })
+  });
+
+  document.getElementById('pickup').textContent =
+    JSON.stringify(await res.json(), null, 2);
+}
+</script>
+
+</body>
+</html>
